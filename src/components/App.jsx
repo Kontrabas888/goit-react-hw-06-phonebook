@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { addContact, deleteContact, updateFilter } from "../redux/contactSlice";
+import { useSelector } from "react-redux";
+import { deleteContact } from "../redux/contactSlice";
 import ContactForm from "./ContactForm";
 import ContactList from "./ContactList";
 import FilterInput from "./FilterInput";
@@ -11,22 +11,7 @@ import "../redux/style.css";
 
 function App() {
   const [showForm, setShowForm] = useState(false);
-  const dispatch = useDispatch();
   const contacts = useSelector((state) => state.contacts);
-  const filter = useSelector((state) => state.filter);
-
-  const handleAddContact = (name, phone) => {
-    dispatch(addContact({ name, phone }));
-    setShowForm(false);
-  };
-
-  const handleDeleteContact = (id) => {
-    dispatch(deleteContact(id));
-  };
-
-  const handleFilterChange = (e) => {
-    dispatch(updateFilter(e.target.value));
-  };
 
   return (
     <Provider store={store}>
@@ -36,14 +21,12 @@ function App() {
           <button onClick={() => setShowForm(!showForm)}>
             {showForm ? "Hide Form" : "Add Contact"}
           </button>
-          {showForm && <ContactForm onAddContact={handleAddContact} />}
+          {showForm && <ContactForm />}
           <h2>Contacts</h2>
-          <FilterInput value={filter} onChange={handleFilterChange} />
+          <FilterInput />
           <ContactList
-            contacts={contacts.filter((contact) =>
-              contact.name.toLowerCase().includes(filter.toLowerCase())
-            )}
-            onDeleteContact={handleDeleteContact}
+            contacts={contacts}
+            onContactDelete={(id) => store.dispatch(deleteContact(id))}
           />
         </div>
       </PersistGate>

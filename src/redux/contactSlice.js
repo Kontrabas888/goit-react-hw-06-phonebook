@@ -1,4 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAction, createSlice } from '@reduxjs/toolkit';
+
+export const register = createAction('REGISTER');
 
 const contactSlice = createSlice({
   name: 'contacts',
@@ -18,6 +20,12 @@ const contactSlice = createSlice({
     updateFilter: (state, action) => {
       state.filter = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(register, (state, action) => {
+      const { key } = action.payload;
+      state.contacts.push({ id: state.contacts.length + 1, name: key });
+    });
   },
 });
 

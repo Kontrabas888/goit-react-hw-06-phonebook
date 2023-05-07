@@ -7,6 +7,7 @@ import contactReducer from './contactSlice';
 const persistConfig = {
   key: 'root',
   storage,
+  serialize: JSON.stringify,
 };
 
 const persistedReducer = persistReducer(persistConfig, contactReducer);

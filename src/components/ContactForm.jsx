@@ -1,21 +1,23 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addContact } from '../redux/contactSlice';
+import { v4 as uuidv4 } from 'uuid';
 
 function ContactForm() {
   const dispatch = useDispatch();
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
 
-  const handleSubmit = e => {
+  const handleAddContact = (e) => {
     e.preventDefault();
-    dispatch(addContact({ name, phone }));
+    const id = uuidv4();
+    dispatch(addContact({ name, phone, id }));
     setName('');
     setPhone('');
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleAddContact}>
       <label>
         Name:
         <input type="text" value={name} onChange={e => setName(e.target.value)} />

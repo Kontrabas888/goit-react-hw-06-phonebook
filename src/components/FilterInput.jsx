@@ -1,17 +1,21 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateFilter } from '../redux/contactSlice';
+import ContactList from './ContactList';
 
-function FilterInput({ value, onChange }) {
+function FilterInput() {
   const dispatch = useDispatch();
+  const filter = useSelector((state) => state.filter);
+  const contacts = useSelector((state) => state.contacts);
 
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     const inputValue = e.target.value;
     dispatch(updateFilter(inputValue));
-    if (onChange) {
-      onChange(inputValue);
-    }
   };
+
+  const filteredContacts = contacts.filter(
+    (contact) => contact.name.toLowerCase().includes(filter.toLowerCase())
+  );
 
   return (
     <div>
@@ -20,9 +24,10 @@ function FilterInput({ value, onChange }) {
         type="text"
         id="filter"
         name="filter"
-        value={value}
+        value={filter}
         onChange={handleInputChange}
       />
+      {filter && <ContactList contacts={filteredContacts} />}
     </div>
   );
 }
